@@ -6,7 +6,7 @@ version = 4
 name = "addchain"
 version = "0.2.0"
 dependencies = [
- "num-bigint",
+ "num-bigint 0.4.6 (git+https://github.com/earthlings-dev/num-bigint.git)",
  "num-integer",
  "num-traits",
 ]
@@ -658,6 +658,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-bigint"
+version = "0.4.6"
+source = "git+https://github.com/earthlings-dev/num-bigint.git#8c42246d2b8a8b65b07a3b5772b286da3c401709"
+dependencies = [
+ "num-integer",
+ "num-traits",
+]
+
+[[package]]
 name = "num-integer"
 version = "0.1.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -948,7 +957,7 @@ name = "rustcrypto-ff_derive"
 version = "0.14.0-rc.0"
 dependencies = [
  "addchain",
- "num-bigint",
+ "num-bigint 0.4.6",
  "num-integer",
  "num-traits",
  "proc-macro2",
