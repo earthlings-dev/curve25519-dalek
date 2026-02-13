@@ -9,7 +9,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.93.0"
+rust-version = "1.93"
 
 [workspace.dependencies]
 # Internal workspace crates (features vary per consumer, so kept minimal here)
