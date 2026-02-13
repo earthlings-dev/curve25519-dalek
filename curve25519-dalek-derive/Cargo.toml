@@ -1,7 +1,8 @@
 [package]
 name = "curve25519-dalek-derive"
 version = "0.1.1"
-edition = "2021"
+edition.workspace = true
+rust-version.workspace = true
 
 repository = "https://github.com/dalek-cryptography/curve25519-dalek"
 homepage = "https://github.com/dalek-cryptography/curve25519-dalek"
@@ -14,6 +15,6 @@ description = "curve25519-dalek Derives"
 proc-macro = true
 
 [dependencies]
-proc-macro2 = "1.0.66"
-quote = "1.0.31"
-syn = { version = "2.0.27", features = ["full"] }
+proc-macro2.workspace = true
+quote.workspace = true
+syn.workspace = true

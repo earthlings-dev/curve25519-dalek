@@ -241,7 +241,7 @@ mod tests {
             metadata.extend_from_slice(&encode_usize_as_u32(message.len()));
 
             self.state.meta_ad(&metadata, false);
-            self.state.ad(&message, false);
+            self.state.ad(message, false);
         }
 
         /// Strobe op: meta-AD(label || len(dest)); PRF into challenge_bytes

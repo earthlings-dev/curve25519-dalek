@@ -1864,15 +1864,19 @@ pub(crate) mod test {
     #[cfg(feature = "serde")]
     fn serde_bincode_scalar_roundtrip() {
         use bincode;
-        let encoded = bincode::serialize(&X).unwrap();
-        let parsed: Scalar = bincode::deserialize(&encoded).unwrap();
+        let encoded = bincode::serialize(&X).expect("scalar serialization failed");
+        let parsed: Scalar = bincode::deserialize(&encoded).expect("scalar deserialization failed");
         assert_eq!(parsed, X);
 
         // Check that the encoding is 32 bytes exactly
         assert_eq!(encoded.len(), 32);
 
         // Check that the encoding itself matches the usual one
-        assert_eq!(X, bincode::deserialize(X.as_bytes()).unwrap(),);
+        assert_eq!(
+            X,
+            bincode::deserialize(X.as_bytes())
+                .expect("scalar deserialization from raw bytes failed"),
+        );
     }
 
     #[cfg(debug_assertions)]
@@ -2042,13 +2046,13 @@ pub(crate) mod test {
 
         // ROOT_OF_UNITY^{2^s} mod m == 1
         assert_eq!(
-            Scalar::ROOT_OF_UNITY.pow(&[1u64 << Scalar::S, 0, 0, 0]),
+            Scalar::ROOT_OF_UNITY.pow([1u64 << Scalar::S, 0, 0, 0]),
             Scalar::ONE,
         );
 
         // DELTA^{t} mod m == 1
         assert_eq!(
-            Scalar::DELTA.pow(&[
+            Scalar::DELTA.pow([
                 0x9604_98c6_973d_74fb,
                 0x0537_be77_a8bd_e735,
                 0x0000_0000_0000_0000,

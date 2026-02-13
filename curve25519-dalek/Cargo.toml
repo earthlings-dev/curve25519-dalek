@@ -4,8 +4,8 @@ name = "curve25519-dalek"
 # - update CHANGELOG
 # - update README if required by semver
 version = "5.0.0-pre.6"
-edition = "2024"
-rust-version = "1.85.0"
+edition.workspace = true
+rust-version.workspace = true
 authors = [
     "Isis Lovecruft <isis@patternsinthevoid.net>",
     "Henry de Valence <hdevalence@hdevalence.ca>",
@@ -30,15 +30,15 @@ rustdoc-args = [
 all-features = true
 
 [dev-dependencies]
-bincode = "1"
-criterion = { version = "0.5", features = ["html_reports"] }
-getrandom = { version = "0.4", features = ["sys_rng"] }
-hex = "0.4.2"
-proptest = "1"
-sha2 = { version = "0.11.0-rc.5", default-features = false }
+bincode.workspace = true
+criterion = { workspace = true, features = ["html_reports"] }
+getrandom = { workspace = true, features = ["sys_rng"] }
+hex.workspace = true
+proptest.workspace = true
+sha2.workspace = true
 
 [build-dependencies]
-rustc_version = "0.4.0"
+rustc_version.workspace = true
 
 [[bench]]
 name = "dalek_benchmarks"
@@ -46,26 +46,20 @@ harness = false
 required-features = ["alloc", "rand_core"]
 
 [dependencies]
-cfg-if = "1"
-ff = { version = "0.14.0-rc.0", package = "rustcrypto-ff", default-features = false, optional = true }
-group = { version = "0.14.0-rc.0", package = "rustcrypto-group", default-features = false, optional = true }
-rand_core = { version = "0.10", default-features = false, optional = true }
-digest = { version = "0.11.0-rc.11", default-features = false, optional = true, features = [
-    "block-api",
-] }
-subtle = { version = "2.6.0", default-features = false, features = [
-    "const-generics",
-] }
-serde = { version = "1.0", default-features = false, optional = true, features = [
-    "derive",
-] }
-zeroize = { version = "1", default-features = false, optional = true }
+cfg-if.workspace = true
+ff = { workspace = true, optional = true }
+group = { workspace = true, optional = true }
+rand_core = { workspace = true, optional = true }
+digest = { workspace = true, optional = true, features = ["block-api"] }
+subtle = { workspace = true, features = ["const-generics"] }
+serde = { workspace = true, optional = true, features = ["derive"] }
+zeroize = { workspace = true, optional = true }
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]
-cpufeatures = "0.2.17"
+cpufeatures.workspace = true
 
 [target.'cfg(curve25519_dalek_backend = "fiat")'.dependencies]
-fiat-crypto = { version = "0.3.0", default-features = false }
+fiat-crypto.workspace = true
 
 [features]
 default = ["alloc", "precomputed-tables", "zeroize"]
@@ -78,7 +72,7 @@ digest = ["dep:digest"]
 lizard = ["digest"]
 
 [target.'cfg(all(not(curve25519_dalek_backend = "fiat"), not(curve25519_dalek_backend = "serial"), target_arch = "x86_64"))'.dependencies]
-curve25519-dalek-derive = "0.1"
+curve25519-dalek-derive.workspace = true
 
 [lints.rust.unexpected_cfgs]
 level = "warn"

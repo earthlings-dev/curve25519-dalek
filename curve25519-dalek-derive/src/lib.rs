@@ -172,21 +172,21 @@ fn process_mod(
         'next_item: for item in content {
             if let Some(ref spec_features) = spec_features {
                 match item {
-                    syn::Item::Const(syn::ItemConst { ref mut attrs, .. })
-                    | syn::Item::Enum(syn::ItemEnum { ref mut attrs, .. })
-                    | syn::Item::ExternCrate(syn::ItemExternCrate { ref mut attrs, .. })
-                    | syn::Item::Fn(syn::ItemFn { ref mut attrs, .. })
-                    | syn::Item::ForeignMod(syn::ItemForeignMod { ref mut attrs, .. })
-                    | syn::Item::Impl(syn::ItemImpl { ref mut attrs, .. })
-                    | syn::Item::Macro(syn::ItemMacro { ref mut attrs, .. })
-                    | syn::Item::Mod(syn::ItemMod { ref mut attrs, .. })
-                    | syn::Item::Static(syn::ItemStatic { ref mut attrs, .. })
-                    | syn::Item::Struct(syn::ItemStruct { ref mut attrs, .. })
-                    | syn::Item::Trait(syn::ItemTrait { ref mut attrs, .. })
-                    | syn::Item::TraitAlias(syn::ItemTraitAlias { ref mut attrs, .. })
-                    | syn::Item::Type(syn::ItemType { ref mut attrs, .. })
-                    | syn::Item::Union(syn::ItemUnion { ref mut attrs, .. })
-                    | syn::Item::Use(syn::ItemUse { ref mut attrs, .. }) => {
+                    syn::Item::Const(syn::ItemConst { attrs, .. })
+                    | syn::Item::Enum(syn::ItemEnum { attrs, .. })
+                    | syn::Item::ExternCrate(syn::ItemExternCrate { attrs, .. })
+                    | syn::Item::Fn(syn::ItemFn { attrs, .. })
+                    | syn::Item::ForeignMod(syn::ItemForeignMod { attrs, .. })
+                    | syn::Item::Impl(syn::ItemImpl { attrs, .. })
+                    | syn::Item::Macro(syn::ItemMacro { attrs, .. })
+                    | syn::Item::Mod(syn::ItemMod { attrs, .. })
+                    | syn::Item::Static(syn::ItemStatic { attrs, .. })
+                    | syn::Item::Struct(syn::ItemStruct { attrs, .. })
+                    | syn::Item::Trait(syn::ItemTrait { attrs, .. })
+                    | syn::Item::TraitAlias(syn::ItemTraitAlias { attrs, .. })
+                    | syn::Item::Type(syn::ItemType { attrs, .. })
+                    | syn::Item::Union(syn::ItemUnion { attrs, .. })
+                    | syn::Item::Use(syn::ItemUse { attrs, .. }) => {
                         let mut index = 0;
                         while index < attrs.len() {
                             let attr = &attrs[index];

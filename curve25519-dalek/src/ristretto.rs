@@ -1285,23 +1285,27 @@ mod test {
     fn serde_bincode_basepoint_roundtrip() {
         use bincode;
 
-        let encoded = bincode::serialize(&constants::RISTRETTO_BASEPOINT_POINT).unwrap();
-        let enc_compressed =
-            bincode::serialize(&constants::RISTRETTO_BASEPOINT_COMPRESSED).unwrap();
+        let encoded = bincode::serialize(&constants::RISTRETTO_BASEPOINT_POINT)
+            .expect("ristretto basepoint serialization failed");
+        let enc_compressed = bincode::serialize(&constants::RISTRETTO_BASEPOINT_COMPRESSED)
+            .expect("compressed ristretto basepoint serialization failed");
         assert_eq!(encoded, enc_compressed);
 
         // Check that the encoding is 32 bytes exactly
         assert_eq!(encoded.len(), 32);
 
-        let dec_uncompressed: RistrettoPoint = bincode::deserialize(&encoded).unwrap();
-        let dec_compressed: CompressedRistretto = bincode::deserialize(&encoded).unwrap();
+        let dec_uncompressed: RistrettoPoint =
+            bincode::deserialize(&encoded).expect("RistrettoPoint deserialization failed");
+        let dec_compressed: CompressedRistretto =
+            bincode::deserialize(&encoded).expect("CompressedRistretto deserialization failed");
 
         assert_eq!(dec_uncompressed, constants::RISTRETTO_BASEPOINT_POINT);
         assert_eq!(dec_compressed, constants::RISTRETTO_BASEPOINT_COMPRESSED);
 
         // Check that the encoding itself matches the usual one
         let raw_bytes = constants::RISTRETTO_BASEPOINT_COMPRESSED.as_bytes();
-        let bp: RistrettoPoint = bincode::deserialize(raw_bytes).unwrap();
+        let bp: RistrettoPoint = bincode::deserialize(raw_bytes)
+            .expect("ristretto basepoint deserialization from raw bytes failed");
         assert_eq!(bp, constants::RISTRETTO_BASEPOINT_POINT);
     }
 
@@ -1328,7 +1332,7 @@ mod test {
         let s2 = Scalar::from(333u64);
         let P2 = BASE * s2;
 
-        let vec = vec![P1, P2];
+        let vec = [P1, P2];
         let sum: RistrettoPoint = vec.iter().sum();
 
         assert_eq!(sum, P1 + P2);
@@ -1357,7 +1361,9 @@ mod test {
     #[test]
     fn decompress_id() {
         let compressed_id = CompressedRistretto::identity();
-        let id = compressed_id.decompress().unwrap();
+        let id = compressed_id
+            .decompress()
+            .expect("identity decompression should succeed");
         let mut identity_in_coset = false;
         for P in &id.coset4() {
             if P.compress() == CompressedEdwardsY::identity() {
@@ -1376,7 +1382,10 @@ mod test {
     #[test]
     fn basepoint_roundtrip() {
         let bp_compressed_ristretto = constants::RISTRETTO_BASEPOINT_POINT.compress();
-        let bp_recaf = bp_compressed_ristretto.decompress().unwrap().0;
+        let bp_recaf = bp_compressed_ristretto
+            .decompress()
+            .expect("ristretto basepoint roundtrip decompression should succeed")
+            .0;
         // Check that bp_recaf differs from bp by a point of order 4
         let diff = constants::RISTRETTO_BASEPOINT_POINT.0 - bp_recaf;
         let diff4 = diff.mul_by_pow_2(2);
@@ -1487,7 +1496,9 @@ mod test {
         for _ in 0..100 {
             let P = RistrettoPoint::mul_base(&Scalar::random(&mut rng));
             let compressed_P = P.compress();
-            let Q = compressed_P.decompress().unwrap();
+            let Q = compressed_P
+                .decompress()
+                .expect("random ristretto point roundtrip decompression should succeed");
             assert_eq!(P, Q);
         }
     }
@@ -1499,7 +1510,10 @@ mod test {
         let mut rng = SysRng;
 
         let mut points: Vec<RistrettoPoint> = (0..1024)
-            .map(|_| RistrettoPoint::try_from_rng(&mut rng).unwrap())
+            .map(|_| {
+                RistrettoPoint::try_from_rng(&mut rng)
+                    .expect("random ristretto point generation should succeed")
+            })
             .collect();
         points[500] = <RistrettoPoint as Group>::identity();
 

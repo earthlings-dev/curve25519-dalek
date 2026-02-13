@@ -803,34 +803,43 @@ mod test {
         for (input_bytes, expected_reduced) in FROM_BYTES_WIDE_KAT_BIG {
             let reduce_fe = FieldElement::from_bytes_wide(
                 &hex::decode(input_bytes)
-                    .unwrap()
+                    .expect("KAT input hex should be valid")
                     .as_slice()
                     .try_into()
-                    .unwrap(),
+                    .expect("KAT input should decode to exactly 64 bytes"),
             );
             assert_eq!(
                 &reduce_fe.to_bytes(),
-                hex::decode(expected_reduced).unwrap().as_slice()
+                hex::decode(expected_reduced)
+                    .expect("KAT expected hex should be valid")
+                    .as_slice()
             );
         }
 
         // Now do the 48-byte inputs
         for (input_bytes, expected_reduced) in FROM_BYTES_WIDE_KAT_MEDIUM {
             let mut padded_input_bytes = [0u8; 64];
-            padded_input_bytes[..48].copy_from_slice(&hex::decode(input_bytes).unwrap());
+            padded_input_bytes[..48]
+                .copy_from_slice(&hex::decode(input_bytes).expect("KAT input hex should be valid"));
             let reduce_fe = FieldElement::from_bytes_wide(&padded_input_bytes);
             assert_eq!(
                 &reduce_fe.to_bytes(),
-                hex::decode(expected_reduced).unwrap().as_slice()
+                hex::decode(expected_reduced)
+                    .expect("KAT expected hex should be valid")
+                    .as_slice()
             );
         }
     }
 
     #[cfg(feature = "digest")]
     fn fe_from_test_vector(expected_hex: &str) -> FieldElement {
-        let mut expected_hash = hex::decode(expected_hex).unwrap();
+        let mut expected_hash = hex::decode(expected_hex).expect("test vector hex should be valid");
         expected_hash.reverse();
-        FieldElement::from_bytes(&expected_hash.try_into().unwrap())
+        FieldElement::from_bytes(
+            &expected_hash
+                .try_into()
+                .expect("test vector should decode to exactly 32 bytes"),
+        )
     }
 
     /// Hash to field test vectors from

@@ -540,14 +540,17 @@ mod test {
     fn serde_bincode_basepoint_roundtrip() {
         use bincode;
 
-        let encoded = bincode::serialize(&constants::X25519_BASEPOINT).unwrap();
-        let decoded: MontgomeryPoint = bincode::deserialize(&encoded).unwrap();
+        let encoded = bincode::serialize(&constants::X25519_BASEPOINT)
+            .expect("basepoint serialization failed");
+        let decoded: MontgomeryPoint =
+            bincode::deserialize(&encoded).expect("basepoint deserialization failed");
 
         assert_eq!(encoded.len(), 32);
         assert_eq!(decoded, constants::X25519_BASEPOINT);
 
         let raw_bytes = constants::X25519_BASEPOINT.as_bytes();
-        let bp: MontgomeryPoint = bincode::deserialize(raw_bytes).unwrap();
+        let bp: MontgomeryPoint = bincode::deserialize(raw_bytes)
+            .expect("basepoint deserialization from raw bytes failed");
         assert_eq!(bp, constants::X25519_BASEPOINT);
     }
 
@@ -557,12 +560,16 @@ mod test {
         // sign bit = 0 => basepoint
         assert_eq!(
             constants::ED25519_BASEPOINT_POINT,
-            constants::X25519_BASEPOINT.to_edwards(0).unwrap()
+            constants::X25519_BASEPOINT
+                .to_edwards(0)
+                .expect("basepoint to_edwards(0) should succeed")
         );
         // sign bit = 1 => minus basepoint
         assert_eq!(
             -constants::ED25519_BASEPOINT_POINT,
-            constants::X25519_BASEPOINT.to_edwards(1).unwrap()
+            constants::X25519_BASEPOINT
+                .to_edwards(1)
+                .expect("basepoint to_edwards(1) should succeed")
         );
     }
 

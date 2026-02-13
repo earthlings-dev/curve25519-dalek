@@ -240,15 +240,19 @@ mod test {
         assert_eq!(data.len(), 16);
         assert_eq!(expected_pt_bytes.len(), 32);
 
-        let p = RistrettoPoint::lizard_encode::<Sha256>(data.try_into().unwrap());
+        let p = RistrettoPoint::lizard_encode::<Sha256>(
+            data.try_into().expect("data should be exactly 16 bytes"),
+        );
         let pt_bytes = p.compress().to_bytes();
         assert!(pt_bytes == expected_pt_bytes);
         let p = CompressedRistretto::from_slice(&pt_bytes)
-            .unwrap()
+            .expect("compressed ristretto from_slice should succeed for 32-byte input")
             .decompress()
-            .unwrap();
-        let data_out = p.lizard_decode::<Sha256>().unwrap();
-        assert!(&data_out == data);
+            .expect("decompression of lizard-encoded point should succeed");
+        let data_out = p
+            .lizard_decode::<Sha256>()
+            .expect("lizard_decode of a lizard-encoded point should succeed");
+        assert!(data_out == data);
     }
 
     #[test]
@@ -275,7 +279,10 @@ mod test {
             ),
         ];
         for tv in test_vectors {
-            test_lizard_encode_helper(&hex::decode(tv.0).unwrap(), &hex::decode(tv.1).unwrap());
+            test_lizard_encode_helper(
+                &hex::decode(tv.0).expect("test vector input hex should be valid"),
+                &hex::decode(tv.1).expect("test vector expected hex should be valid"),
+            );
         }
     }
 
@@ -389,7 +396,7 @@ mod test {
                         panic!("input is in the latter 8 inverses ({input:02x?})");
                     }
                     // Per the README, the probability of finding two inverses is ~2^-122
-                    if found == true {
+                    if found {
                         panic!("found two inverses ({input:02x?})");
                     }
 

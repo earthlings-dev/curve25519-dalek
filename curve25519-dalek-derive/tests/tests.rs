@@ -106,14 +106,14 @@ mod inner_spec {
 
     #[test]
     fn test_specialized() {
-        assert!(!IS_AVX2);
+        const { assert!(!IS_AVX2) };
     }
 
     #[cfg(test)]
     mod tests {
         #[test]
         fn test_specialized_inner() {
-            assert!(!super::IS_AVX2);
+            const { assert!(!super::IS_AVX2) };
         }
     }
 }
@@ -130,7 +130,9 @@ fn test_sse2_only() {}
 #[unsafe_target_feature("avx512vp2intersect")]
 #[test]
 fn test_unset_target_feature() {
-    compile_error!("When an unknown target_feature is set on a test, unsafe_target_feature is expected remove the function");
+    compile_error!(
+        "When an unknown target_feature is set on a test, unsafe_target_feature is expected remove the function"
+    );
 }
 
 #[test]
